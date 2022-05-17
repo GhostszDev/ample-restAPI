@@ -4,29 +4,17 @@ const app = express();
 const path = require('path');
 const host = process.env.HOST;
 const port = process.env.PORT;
-const pool = require("./db");
+const db = require("./db");
+const bodyParser = require("body-parser");
 
 app.use(express.json());
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.json());
 
-app.post('/'+process.env.API_PRE+'/login', (req, res) => {
-    let data = [];
-    let queryData = [];
+app.post('/'+process.env.API_PRE+'/login', db.login)
+app.post('/'+process.env.API_PRE+'/add-to-list', db.addToStockList)
 
-    pool
-        .query('SELECT * FROM public.ample_data')
-        .then(res => console.log(res))
-        .catch(err => console.error('Error executing query', err.stack))
-
-    res.send(data);
-})
-
-app.post('/'+process.env.API_PRE+'/stock-list', (req, res) => {
-    let data = [];
-
-    data['Test'] = true;
-
-    res.send(data);
-})
+app.get('/'+process.env.API_PRE+'/stock-list', db.stockList)
 
 app.listen(port, () =>
     console.log(`Server is listening on port ${host}:${port}!`)
