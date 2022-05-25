@@ -11,6 +11,12 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 app.post('/'+process.env.API_PRE+'/login', db.login)
 app.post('/'+process.env.API_PRE+'/add-to-list', db.addToStockList)
 

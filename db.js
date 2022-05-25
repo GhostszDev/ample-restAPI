@@ -46,13 +46,24 @@ const login = (request, response) => {
 }
 
 const stockList = (request, response) => {
+    const data = {
+        table_data: []
+    };
+    let key = 0;
     pool.query('SELECT * FROM public.ample_data',
         function(error, results, fields) {
 
             if (error) console.log(error);
 
             if (results.rows.length > 0) {
-                response.send(results.rows)
+
+                for(i=0;i<results.rows.length;i++){
+                    data.table_data.push(results.rows[i])
+                }
+
+                console.log(data)
+                response.send(data)
+
             } else {
                 response.send('No jobs on this list.');
             }
